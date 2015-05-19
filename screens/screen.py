@@ -51,8 +51,10 @@ class GameScreen(Screen):
         self.sprites = [sophia]
 
     def update(self):
+        held_keys = _keys_held()
+
         for s in self.sprites:
-            s.update(self.level)
+            s.update(self.level, held_keys)
         self.camera.update()
 
     def draw(self, surface):
@@ -66,7 +68,7 @@ class GameScreen(Screen):
         self.gui.draw(surface)
 
     def handle_key(self, key, release=False):
-        pressed, held = _key_transform_(key)
+        pressed = _key_transform_(key)
 
         if key == pygame.K_HOME:
             self.camera.focus_on(self.player)
@@ -98,21 +100,24 @@ class MenuScreen(Screen):
         surface.blit(txt, rect.inflate(-10, -10))
 
 
+
+_keymap_ = {pygame.K_UP: 'UP',
+            pygame.K_DOWN: 'DN',
+            pygame.K_LEFT: 'LT',
+            pygame.K_RIGHT: 'RT',
+            pygame.K_z: 'JMP'}
+
+
 def _key_transform_(pressed):
+    return _keymap_.get(pressed, None)
 
-    keymap = {pygame.K_UP: 'UP',
-              pygame.K_DOWN: 'DN',
-              pygame.K_LEFT: 'LT',
-              pygame.K_RIGHT: 'RT',
-              pygame.K_z: 'JMP'}
 
-    key = keymap.get(pressed, None)
+def _keys_held():
     held = []
-
     state = pygame.key.get_pressed()
 
-    for k, v in keymap.items():
+    for k, v in _keymap_.items():
         if state[k]:
             held.append(v)
 
-    return key, held
+    return  held

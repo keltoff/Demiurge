@@ -21,30 +21,41 @@ class lines(level):
         for l in self.hlines + self.vlines:
             pygame.draw.line(surface, color, camera.transform(_end1(l)), camera.transform(_end2(l)))
 
-    def canMove(self, pos, delta, w=1, h=1):
+    def canMove(self, pos, delta, w=1, h=1, constraint=None):
 
         np = pos + delta
         hit = []
 
-        for y in [l.y for l in self.hlines if l.x1 < pos.x < l.x2]:
+        for l, y in [(l, l.y) for l in self.hlines if l.x1 < pos.x < l.x2]:
             if np.y <= y+h <= pos.y:
-                hit.append('hit_D')
+                hit.append(('hit_D', l))
                 np.y = y+h
             
             if pos.y <= y-h <= np.y:
-                hit.append('hit_U')
+                hit.append(('hit_U', l))
                 np.y = y-h
             
                 
-        for x in [l.x for l in self.vlines if l.y1 < pos.y < l.y2]:
+        for l, x in [(l, l.x) for l in self.vlines if l.y1 < pos.y < l.y2]:
             if np.x <= x+w <= pos.x:
-                hit.append('hit_L')
+                hit.append(('hit_L', l))
                 np.x = x+w
             
             if pos.x <= x-w <= np.x:
-                hit.append('hit_R')
+                hit.append(('hit_R', l))
                 np.x = x-w
-                
+
+        if isinstance(constraint, HLine):
+            if np.x < constraint.x1:
+                hit.append(('drop', constraint.x1))
+            if np.x > constraint.x2:
+                hit.append(('drop', constraint.x2))
+        if isinstance(constraint, VLine):
+            if np.y < constraint.y1:
+                hit.append(('drop', constraint.y1))
+            if np.y > constraint.y2:
+                hit.append(('drop', constraint.y2))
+
         return np, hit
 
     def add_h_line(self, x1, x2, y):
@@ -53,6 +64,8 @@ class lines(level):
     def add_v_line(self, x, y1, y2):
         self.vlines.append(VLine(x, y1, y2))
 
+def drawline(surface, color, camera, line):
+    pygame.draw.line(surface, color, camera.transform(_end1(line)), camera.transform(_end2(line)))
 
 def _end1(line):
     if isinstance(line, HLine):
