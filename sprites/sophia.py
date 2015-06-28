@@ -48,7 +48,7 @@ class sophia():
         self.add_state(state('left_run', img=3, hold='LT', end='left', speed=Position(-self.speed, 0),
                                          shift=_merge_(base, left, {'DN': 'left_slide', 'hit_L':'left'})))
         self.add_state(state('left_crouch', img=4, hold='DN', end='left', shift={'LT': 'left_slide'}))
-        self.add_state(state('left_jump', img=5, speed=Position(-5, 15), hold='JMP', end='left_fall', shift={'RT': 'right_jump'}))
+        self.add_state(state('left_jump', img=5, speed=Position(-5, 15), end='left_fall', shift={'RT': 'right_jump'}))
         self.add_state(state('left_fall', img=1, speed=Position(0, -5), end='left', shift={'hit_D': 'left', 'RT': 'right_fall'}))
 
         self.add_state(state('right', img=1, shift=_merge_(base, right, {'RT':'right_run'})))
@@ -73,8 +73,12 @@ class sophia():
     def cpos(self):
         return self.pos - self.radius
 
-    def control(self, key):
-        self.state.control(key)
+    def control(self, command):
+
+        if command in ['JMP']:
+            self.jump_height_left = 200  # max jump height - get from level?
+
+        self.state.control(command)
 
     def update(self, level, keys):
 
@@ -84,6 +88,12 @@ class sophia():
         # v = self.state.speed + level.G
         v = self.state.speed
         self.pos, hit = level.canMove(self.pos, v, h=self.radius.x, w=-self.radius.y, constraint=self.stick)
+
+        if self.jump_height_left > 0:
+            self.jump_height_left -= v[1]
+        if self.jump_height_left <= 0:
+            self.jump_height_left = 0
+            self.control('fall')
 
         for (c, p) in hit:
             if c in ['drop', 'JMP']:
