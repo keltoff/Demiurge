@@ -77,7 +77,8 @@ class GameScreen(Screen):
         if key == pygame.K_PAGEUP:
             self.camera.focus_on(Position(400, 200))
 
-        self.player.control(pressed, release)
+        if release == False:
+            self.player.control(pressed)
 
         # if release:
         #     self.player.control(None, held)

@@ -24,12 +24,9 @@ class state():
     def __str__(self):
         return self.name
 
-    def control(self, pressed, release=False):
-        if self.hold == pressed and release:
-            self.sprite.shift(self.end)
-        else:
-            if self.shift.has_key(pressed):
-                self.sprite.shift(self.shift[pressed])
+    def control(self, pressed):
+        if self.shift.has_key(pressed):
+            self.sprite.shift(self.shift[pressed])
 
 
 # class sophia(pygame.Sprite):
@@ -76,10 +73,14 @@ class sophia():
     def cpos(self):
         return self.pos - self.radius
 
-    def control(self, key, held):
-        self.state.control(key, held)
+    def control(self, key):
+        self.state.control(key)
 
     def update(self, level, keys):
+
+        if self.state.hold not in keys:
+            self.shift(self.state.end)
+
         # v = self.state.speed + level.G
         v = self.state.speed
         self.pos, hit = level.canMove(self.pos, v, h=self.radius.x, w=-self.radius.y, constraint=self.stick)
