@@ -46,17 +46,21 @@ class sophia():
 
         self.add_state(state('left', img=1, shift=_merge_(base, left, {'LT': 'left_run'})))
         self.add_state(state('left_run', img=3, hold='LT', end='left', speed=Position(-self.speed, 0),
-                                         shift=_merge_(base, left, {'DN': 'left_slide', 'hit_L':'left'})))
+                                         shift=_merge_(base, left, {'DN': 'left_slide', 'hit_L': 'left', 'JMP': 'left_jump_l'})))
         self.add_state(state('left_crouch', img=4, hold='DN', end='left', shift={'LT': 'left_slide'}))
-        self.add_state(state('left_jump', img=5, speed=Position(-5, 15), end='left_fall', shift={'RT': 'right_jump'}))
-        self.add_state(state('left_fall', img=1, speed=Position(0, -5), end='left', shift={'hit_D': 'left', 'RT': 'right_fall'}))
+        self.add_state(state('left_jump', img=5, speed=Position(0, 15), hold='JMP', end='left_fall', shift={'RT': 'right_jump_r'}))
+        self.add_state(state('left_jump_l', img=5, speed=Position(-5, 15), hold='LT', end='left_jump', shift={'RT': 'right_jump_r'}))
+        self.add_state(state('left_fall', img=1, speed=Position(0, -5), end='left', shift={'hit_D': 'left', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
+        self.add_state(state('left_fall_l', img=1, speed=Position(-5, -5), hold='LT', end='left_fall', shift={'hit_D': 'left_run', 'RT': 'right_fall_r'}))
 
         self.add_state(state('right', img=1, shift=_merge_(base, right, {'RT':'right_run'})))
         self.add_state(state('right_run', img=3, hold='RT', end='right', speed=Position(self.speed, 0),
                                           shift=_merge_(base, right, {'DN': 'right_slide'})))
         self.add_state(state('right_crouch', img=4, hold='DN', end='right', shift={'RT': 'right_slide'}))
-        self.add_state(state('right_jump', img=5, speed=Position(5, 15), hold='JMP', end='right_fall', shift={'LT': 'left_jump'}))
-        self.add_state(state('right_fall', img=1, speed=Position(0, -5), end='right', shift={'hit_D': 'right', 'LT': 'left_fall'}))
+        self.add_state(state('right_jump', img=5, speed=Position(0, 15), hold='JMP', end='right_fall', shift={'LT': 'left_jump_l'}))
+        self.add_state(state('right_jump_r', img=5, speed=Position(5, 15), hold='left', end='right_jump', shift={'LT': 'left_jump_l'}))
+        self.add_state(state('right_fall', img=1, speed=Position(0, -5), end='right', shift={'hit_D': 'right', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
+        self.add_state(state('right_fall_r', img=1, speed=Position(5, -5), hold='RT', end='right_fall', shift={'hit_D': 'right_run', 'LT': 'left_fall_l'}))
 
         self.add_state(state('back', img=10, hold='DN', end='left', shift=base))
 
@@ -152,13 +156,17 @@ class sophia():
         table['left_run'] = image.subsurface((218, 100, 30, 40))
         table['left_crouch'] = image.subsurface((156, 280, 30, 36))
         table['left_jump'] = image.subsurface((226, 230, 30, 50))
+        table['left_jump_l'] = table['left_jump']
         table['left_fall'] = image.subsurface((150, 222, 30, 55))
+        table['left_fall_l'] = table['left_fall']
 
         table['right'] = image.subsurface((298, 100, 33, 40))
         table['right_run'] = image.subsurface((370, 100, 40, 40))
         table['right_crouch'] = image.subsurface((400, 280, 30, 36))
         table['right_jump'] = image.subsurface((326, 230, 30, 50))
+        table['right_jump_r'] = table['right_jump']
         table['right_fall'] = image.subsurface((402, 222, 30, 55))
+        table['right_fall_r'] = table['right_fall']
         
         table['back'] = image.subsurface((176, 577, 30, 50))
         return table
