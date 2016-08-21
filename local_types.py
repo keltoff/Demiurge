@@ -1,7 +1,3 @@
-__author__ = 'tryid_000'
-
-from collections import namedtuple
-
 class Position():
     def __init__(self, x, y):
         self.x = x

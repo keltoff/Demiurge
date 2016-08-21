@@ -25,7 +25,7 @@ class state():
         return self.name
 
     def control(self, pressed):
-        if self.shift.has_key(pressed):
+        if pressed in self.shift:
             self.sprite.shift(self.shift[pressed])
 
 
@@ -37,6 +37,8 @@ class sophia():
         self.rect = Rect(0, 0, 30, 50)
         self.speed = 10
         self.stick = None
+
+        self.jump_height_left = 0
 
         self.states = dict()
 
@@ -68,10 +70,7 @@ class sophia():
 
         self.state = self.states['left']
 
-
-
         self.sprites = self.load_img()
-
 
     @property
     def cpos(self):
@@ -91,7 +90,7 @@ class sophia():
 
         # v = self.state.speed + level.G
         v = self.state.speed
-        self.pos, hit = level.canMove(self.pos, v, h=self.radius.x, w=-self.radius.y, constraint=self.stick)
+        self.pos, hit = level.can_move(self.pos, v, h=self.radius.x, w=-self.radius.y, constraint=self.stick)
 
         if self.jump_height_left > 0:
             self.jump_height_left -= v[1]
@@ -126,16 +125,16 @@ class sophia():
         # pygame.draw.line(surface, (200, 0, 0), (tp[0]-10, tp[1]), (tp[0]+10, tp[1]))
 
     def shift(self, new_state):
-        if self.states.has_key(new_state):
+        if new_state in self.states:
             # self.states['last'] = self.state
             self.state = self.states[new_state]
 
             w, h = self.sprites[new_state].get_size()
             # self.radius = Position(w/2, -h/2)
 
-            print 'shift to: {}'.format(new_state)
+            print('shift to: {}'.format(new_state))
         else:
-            print 'No such state: {}'.format(new_state)
+            print('No such state: {}'.format(new_state))
 
     def add_state(self, state):
         self.states[state.name] = state
@@ -170,6 +169,7 @@ class sophia():
         
         table['back'] = image.subsurface((176, 577, 30, 50))
         return table
+
 
 def _merge_(dict, *args):
     res = dict.copy()

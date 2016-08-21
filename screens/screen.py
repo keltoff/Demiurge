@@ -1,8 +1,5 @@
 from graphics import camera as cam
 from level.lines import Lines
-
-__author__ = 'tryid_000'
-
 import pygame
 import pygame.locals
 import pygame.draw as draw
@@ -12,7 +9,7 @@ from graphics.background import empty
 import GUI as gui
 from local_types import Position
 import sprites.sophia as soph
-import data
+
 
 class Screen:
     def __init__(self):
@@ -32,24 +29,18 @@ class GameScreen(Screen):
     def __init__(self):
         self.background = empty()
 
-        file = data.load()
+        self.level = Lines.from_xml()
 
-        current_level = Lines()
-        for x1, x2, y in file.walls_h:
-            current_level.add_h_line(x1, x2, y)
-        for x, y1, y2 in file.walls_v:
-            current_level.add_v_line(x, y1, y2)
-
-        self.level = current_level
         self.gui = gui.GUI()
 
         self.camera = cam.camera(Position(320, 240))
 
-        sophia = soph.sophia()
-        sophia.pos = Position(10, 10)
+        # sophia = soph.sophia()
+        # sophia.pos = Position(10, 10)
 
-        self.player = sophia
-        self.sprites = [sophia]
+        # self.player = sophia
+        # self.sprites = [sophia]
+        self.sprites = []
 
     def update(self):
         held_keys = _keys_held()
@@ -87,6 +78,7 @@ class GameScreen(Screen):
         # else:
         #     self.player.control(pressed, held)
 
+
 class MenuScreen(Screen):
     def draw(self, surface):
         self.bar(surface, 'New game', (50, 200))
@@ -100,7 +92,6 @@ class MenuScreen(Screen):
         sf = font.SysFont('blah', 60, bold=False, italic=False)
         txt = sf.render(text, True, (0, 0, 0))
         surface.blit(txt, rect.inflate(-10, -10))
-
 
 
 _keymap_ = {pygame.K_UP: 'UP',
@@ -122,4 +113,4 @@ def _keys_held():
         if state[k]:
             held.append(v)
 
-    return  held
+    return held

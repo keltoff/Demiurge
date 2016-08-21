@@ -19,8 +19,8 @@
         <node pos="(-250,-50)" id="1" />
         <node pos="(-50,-50)" id="2" />
         <node pos="(250,-50)" id="3" />
-        <port pos="(-250, -100)" id="port_low" />
-        <port pos="(250, 30)" id="port_high" />
+        <node pos="(-250, -100)" id="port_low" type="port" />
+        <node pos="(250, 30)" id="port_high" type="port" />
         <link from="1 rt" to="2 lt" />
         <link from="2 rt" to="3 lt" />
         <link from="port_low up" to="1 dn" />

@@ -1,25 +1,40 @@
-from level.level_base import level
+from level.level_base import Level
 from collections import namedtuple
 import pygame.draw
 from local_types import Position
+from sprites.body import Body
+from level.interactable import Interactable
+import level.net as net
 
 
 HLine = namedtuple('HLine', 'x1 x2 y')
 VLine = namedtuple('VLine', 'x y1 y2')
 
 
-class Lines(level):
+class Lines(Level):
     def __init__(self):
         self.hlines = []
         self.vlines = []
+        self.bodies = []
+        self.objects = []
+        self.net = None
         self.G = Position(0, -5)
 
     def draw(self, surface, camera):
+        def draw_all(X):
+            for x in X:
+                x.draw(surface, camera)
+
         color = (0, 180, 250)
+
         for l in self.hlines + self.vlines:
             pygame.draw.line(surface, color, camera.transform(_end1(l)), camera.transform(_end2(l)))
 
-    def canMove(self, pos, delta, w=1, h=1, constraint=None):
+        draw_all(self.objects)
+        draw_all(self.bodies)
+        net.draw(self.net, surface, camera)
+
+    def can_move(self, pos, delta, w=1, h=1, constraint=None):
 
         np = pos + delta
         hit = []
@@ -55,11 +70,19 @@ class Lines(level):
 
         return np, hit
 
-    def add_h_line(self, x1, x2, y):
-        self.hlines.append(HLine(x1, x2, y))
+    def load(self, xml):
+        for h in xml.findall('walls/horizontal'):
+            def out(val): return int(h.attrib[val])
+            self.hlines.append(HLine(out('x1'), out('x2'), out('y')))
+        for v in xml.findall('walls/vertical'):
+            def out(val): return int(v.attrib[val])
+            self.vlines.append(VLine(out('x'), out('y1'), out('y2')))
 
-    def add_v_line(self, x, y1, y2):
-        self.vlines.append(VLine(x, y1, y2))
+        self.objects = [Interactable.from_xml(t) for t in xml.findall('objects/terminal')]
+
+        self.bodies = [Body.from_xml(b) for b in xml.findall('bodies/body')]
+
+        self.net = net.from_xml(xml.find('net'))
 
 
 def drawline(surface, color, camera, line):
