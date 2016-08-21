@@ -1,7 +1,4 @@
 from level.level_base import level
-
-__author__ = 'tryid_000'
-
 from collections import namedtuple
 import pygame.draw
 from local_types import Position
@@ -10,7 +7,8 @@ from local_types import Position
 HLine = namedtuple('HLine', 'x1 x2 y')
 VLine = namedtuple('VLine', 'x y1 y2')
 
-class lines(level):
+
+class Lines(level):
     def __init__(self):
         self.hlines = []
         self.vlines = []
@@ -34,8 +32,7 @@ class lines(level):
             if pos.y <= y-h <= np.y:
                 hit.append(('hit_U', l))
                 np.y = y-h
-            
-                
+
         for l, x in [(l, l.x) for l in self.vlines if l.y1 < pos.y < l.y2]:
             if np.x <= x+w <= pos.x:
                 hit.append(('hit_L', l))
@@ -64,14 +61,17 @@ class lines(level):
     def add_v_line(self, x, y1, y2):
         self.vlines.append(VLine(x, y1, y2))
 
+
 def drawline(surface, color, camera, line):
     pygame.draw.line(surface, color, camera.transform(_end1(line)), camera.transform(_end2(line)))
+
 
 def _end1(line):
     if isinstance(line, HLine):
         return Position(line.x1, line.y)
     if isinstance(line, VLine):
         return Position(line.x, line.y1)
+
 
 def _end2(line):
     if isinstance(line, HLine):

@@ -1,5 +1,5 @@
-__author__ = 'tryid_000'
 import math
+
 
 class level:
     def draw(self, surface, camera):

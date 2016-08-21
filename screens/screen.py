@@ -1,5 +1,5 @@
 from graphics import camera as cam
-from level.lines import lines
+from level.lines import Lines
 
 __author__ = 'tryid_000'
 
@@ -12,6 +12,7 @@ from graphics.background import empty
 import GUI as gui
 from local_types import Position
 import sprites.sophia as soph
+import data
 
 class Screen:
     def __init__(self):
@@ -26,18 +27,18 @@ class Screen:
     def handle_key(self, key, release=False):
         pass
 
+
 class GameScreen(Screen):
     def __init__(self):
         self.background = empty()
 
-        current_level = lines()
-        # current_level.add_h_line(0, 200, 0)
-        # current_level.add_h_line(50, 150, 200)
-        # current_level.add_v_line(150, 0, 200)
+        file = data.load()
 
-        for y, x in enumerate(range(-300, 1000, 100)):
-            current_level.add_h_line(x, x+100, -200 + y*30)
-        current_level.add_v_line(-300, -200, 200)
+        current_level = Lines()
+        for x1, x2, y in file.walls_h:
+            current_level.add_h_line(x1, x2, y)
+        for x, y1, y2 in file.walls_v:
+            current_level.add_v_line(x, y1, y2)
 
         self.level = current_level
         self.gui = gui.GUI()

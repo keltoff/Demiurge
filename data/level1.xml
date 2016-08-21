@@ -1,0 +1,33 @@
+<level>
+    <walls>
+        <horizontal x1="-300" x2="-200" y="-200" />
+        <horizontal x1="-200" x2="-100" y="-170" />
+        <horizontal x1="-100" x2="0" y="-140" />
+        <horizontal x1="0" x2="100" y="-110" />
+        <horizontal x1="100" x2="200" y="-80" />
+        <horizontal x1="200" x2="300" y="-50" />
+        <horizontal x1="300" x2="400" y="-20" />
+        <horizontal x1="400" x2="500" y="-10" />
+        <vertical x="-300" y1="-200" y2="200" />
+    </walls>
+    <bodies first="player">
+        <body pos="(-250, -100)" size="(20, 30)" scheme="human" id="player" />
+        <body pos="(50, -50)" size="(20, 30)" scheme="human" id="npc" />
+        <body pos="(250, 0)" size="(15, 20)" scheme="rob" id="worker" />
+    </bodies>
+    <net>
+        <node pos="(-250,-50)" id="1" />
+        <node pos="(-50,-50)" id="2" />
+        <node pos="(250,-50)" id="3" />
+        <port pos="(-250, -100)" id="port_low" />
+        <port pos="(250, 30)" id="port_high" />
+        <link from="1 rt" to="2 lt" />
+        <link from="2 rt" to="3 lt" />
+        <link from="port_low up" to="1 dn" />
+        <link from="port_high dn" to="3 up" />
+    </net>
+    <objects>
+        <terminal pos="(-150, -150)" node="port_low" />
+        <terminal pos="(150, -30)" node="port_high" />
+    </objects>
+</level>
