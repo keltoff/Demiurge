@@ -1,7 +1,7 @@
 from level.level_base import Level
 from collections import namedtuple
 import pygame.draw
-from local_types import Position
+from local_types import Pt
 from sprites.body import Body
 from level.interactable import Interactable
 import level.net as net
@@ -18,7 +18,7 @@ class Lines(Level):
         self.bodies = []
         self.objects = []
         self.net = None
-        self.G = Position(0, -5)
+        self.G = Pt(0, -5)
 
     def draw(self, surface, camera):
         def draw_all(X):
@@ -91,16 +91,16 @@ def drawline(surface, color, camera, line):
 
 def _end1(line):
     if isinstance(line, HLine):
-        return Position(line.x1, line.y)
+        return Pt(line.x1, line.y)
     if isinstance(line, VLine):
-        return Position(line.x, line.y1)
+        return Pt(line.x, line.y1)
 
 
 def _end2(line):
     if isinstance(line, HLine):
-        return Position(line.x2, line.y)
+        return Pt(line.x2, line.y)
     if isinstance(line, VLine):
-        return Position(line.x, line.y2)
+        return Pt(line.x, line.y2)
     
     # 
     # def canMove(self, pos):

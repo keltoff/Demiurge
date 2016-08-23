@@ -7,7 +7,7 @@ import pygame.font as font
 from pygame import Rect
 from graphics.background import empty
 import GUI as gui
-from local_types import Position
+from local_types import Pt
 import sprites.sophia as soph
 
 
@@ -33,7 +33,7 @@ class GameScreen(Screen):
 
         self.gui = gui.GUI()
 
-        self.camera = cam.camera(Position(320, 240))
+        self.camera = cam.Camera(Pt(320, 240))
 
         # sophia = soph.sophia()
         # sophia.pos = Position(10, 10)
@@ -65,9 +65,9 @@ class GameScreen(Screen):
         if key == pygame.K_HOME:
             self.camera.focus_on(self.player)
         if key == pygame.K_INSERT:
-            self.camera.focus_on(Position(0, 0))
+            self.camera.focus_on(Pt(0, 0))
         if key == pygame.K_PAGEUP:
-            self.camera.focus_on(Position(400, 200))
+            self.camera.focus_on(Pt(400, 200))
 
         if release == False:
             self.player.control(pressed)

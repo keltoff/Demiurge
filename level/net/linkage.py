@@ -26,4 +26,5 @@ class Linkage:
 
 class Straight(Linkage):
     def draw(self, surface, camera):
-        pygame.draw.line(surface, Color('gray'), camera.transform(self.ends[0].pos), camera.transform(self.ends[1].pos), 3)
+        pygame.draw.line(surface, Color('gray'), camera.transform(self.ends[0].pos), camera.transform(self.ends[1].pos), 5)
+        pygame.draw.line(surface, Color('black'), camera.transform(self.ends[0].pos), camera.transform(self.ends[1].pos), 3)

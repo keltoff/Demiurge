@@ -1,7 +1,7 @@
 # import pygame.Sprite
 from pygame import Rect
 import pygame.draw
-from local_types import Position
+from local_types import Pt
 import level.lines as lines
 
 
@@ -16,7 +16,7 @@ class state():
         self.end = end
 
         if speed is None:
-            self.speed = Position(0, 0)
+            self.speed = Pt(0, 0)
         else:
             self.speed = speed
         # self.animation = None
@@ -32,8 +32,8 @@ class state():
 # class sophia(pygame.Sprite):
 class sophia():
     def __init__(self):
-        self.pos = Position(0, 0)
-        self.radius = Position(15, -25)
+        self.pos = Pt(0, 0)
+        self.radius = Pt(15, -25)
         self.rect = Rect(0, 0, 30, 50)
         self.speed = 10
         self.stick = None
@@ -47,22 +47,22 @@ class sophia():
         right = {'JMP': 'right_jump', 'DN': 'right_crouch', 'drop': 'right_fall'}
 
         self.add_state(state('left', img=1, shift=_merge_(base, left, {'LT': 'left_run'})))
-        self.add_state(state('left_run', img=3, hold='LT', end='left', speed=Position(-self.speed, 0),
+        self.add_state(state('left_run', img=3, hold='LT', end='left', speed=Pt(-self.speed, 0),
                                          shift=_merge_(base, left, {'DN': 'left_slide', 'hit_L': 'left', 'JMP': 'left_jump_l'})))
         self.add_state(state('left_crouch', img=4, hold='DN', end='left', shift={'LT': 'left_slide'}))
-        self.add_state(state('left_jump', img=5, speed=Position(0, 15), hold='JMP', end='left_fall', shift={'RT': 'right_jump_r'}))
-        self.add_state(state('left_jump_l', img=5, speed=Position(-5, 15), hold='LT', end='left_jump', shift={'RT': 'right_jump_r'}))
-        self.add_state(state('left_fall', img=1, speed=Position(0, -5), end='left', shift={'hit_D': 'left', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
-        self.add_state(state('left_fall_l', img=1, speed=Position(-5, -5), hold='LT', end='left_fall', shift={'hit_D': 'left_run', 'RT': 'right_fall_r'}))
+        self.add_state(state('left_jump', img=5, speed=Pt(0, 15), hold='JMP', end='left_fall', shift={'RT': 'right_jump_r'}))
+        self.add_state(state('left_jump_l', img=5, speed=Pt(-5, 15), hold='LT', end='left_jump', shift={'RT': 'right_jump_r'}))
+        self.add_state(state('left_fall', img=1, speed=Pt(0, -5), end='left', shift={'hit_D': 'left', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
+        self.add_state(state('left_fall_l', img=1, speed=Pt(-5, -5), hold='LT', end='left_fall', shift={'hit_D': 'left_run', 'RT': 'right_fall_r'}))
 
         self.add_state(state('right', img=1, shift=_merge_(base, right, {'RT':'right_run'})))
-        self.add_state(state('right_run', img=3, hold='RT', end='right', speed=Position(self.speed, 0),
+        self.add_state(state('right_run', img=3, hold='RT', end='right', speed=Pt(self.speed, 0),
                                           shift=_merge_(base, right, {'DN': 'right_slide'})))
         self.add_state(state('right_crouch', img=4, hold='DN', end='right', shift={'RT': 'right_slide'}))
-        self.add_state(state('right_jump', img=5, speed=Position(0, 15), hold='JMP', end='right_fall', shift={'LT': 'left_jump_l'}))
-        self.add_state(state('right_jump_r', img=5, speed=Position(5, 15), hold='left', end='right_jump', shift={'LT': 'left_jump_l'}))
-        self.add_state(state('right_fall', img=1, speed=Position(0, -5), end='right', shift={'hit_D': 'right', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
-        self.add_state(state('right_fall_r', img=1, speed=Position(5, -5), hold='RT', end='right_fall', shift={'hit_D': 'right_run', 'LT': 'left_fall_l'}))
+        self.add_state(state('right_jump', img=5, speed=Pt(0, 15), hold='JMP', end='right_fall', shift={'LT': 'left_jump_l'}))
+        self.add_state(state('right_jump_r', img=5, speed=Pt(5, 15), hold='left', end='right_jump', shift={'LT': 'left_jump_l'}))
+        self.add_state(state('right_fall', img=1, speed=Pt(0, -5), end='right', shift={'hit_D': 'right', 'LT': 'left_fall_l', 'RT': 'right_fall_r'}))
+        self.add_state(state('right_fall_r', img=1, speed=Pt(5, -5), hold='RT', end='right_fall', shift={'hit_D': 'right_run', 'LT': 'left_fall_l'}))
 
         self.add_state(state('back', img=10, hold='DN', end='left', shift=base))
 

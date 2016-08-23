@@ -11,16 +11,16 @@
         <vertical x="-300" y1="-200" y2="200" />
     </walls>
     <bodies first="player">
-        <body pos="(-250, -100)" size="(20, 30)" scheme="human" id="player" />
-        <body pos="(50, -50)" size="(20, 30)" scheme="human" id="npc" />
-        <body pos="(250, 0)" size="(15, 20)" scheme="rob" id="worker" />
+        <body pos="(-250, -200)" size="(50, 30)" scheme="human" id="player" />
+        <body pos="(50, -110)" size="(50, 30)" scheme="human" id="npc" />
+        <body pos="(250, -50)" size="(25, 50)" scheme="rob" id="worker" />
     </bodies>
     <net>
         <node pos="(-250,-50)" id="1" />
         <node pos="(-50,-50)" id="2" />
-        <node pos="(250,-50)" id="3" />
+        <node pos="(150,-50)" id="3" />
         <node pos="(-250, -100)" id="port_low" type="port" />
-        <node pos="(250, 30)" id="port_high" type="port" />
+        <node pos="(150, 30)" id="port_high" type="port" />
         <link from="1 rt" to="2 lt" />
         <link from="2 rt" to="3 lt" />
         <link from="port_low up" to="1 dn" />

@@ -1,14 +1,15 @@
 # import pygame.Sprite
 from pygame import Rect
 import pygame.draw
-from local_types import Position
+from local_types import Pt
 from ast import literal_eval as make_tuple
+import helper
 
 
 # class Body(pygame.Sprite):
 class Body():
     def __init__(self):
-        self.pos = Position(0, 0)
+        self.pos = Pt(0, 0)
         # self.radius = Position(15, -25)
         self.shape = Rect(0, 0, 30, 50)
 
@@ -32,14 +33,12 @@ class Body():
         # sprite = self.sprites[self.state.name]
         # surface.blit(sprite, tpos)
 
-        pygame.draw.rect(surface, pygame.Color('azure'), camera.transform(self.rect))
-
         pt = camera.transform(self.pos)
-        pt = Position(pt[0], pt[1])
-        pygame.draw.line(surface, pygame.Color('red'), pt.t, (pt + Position(-5, 0)).t)
-        pygame.draw.line(surface, pygame.Color('red'), pt.t, (pt + Position(5, 0)).t)
-        pygame.draw.line(surface, pygame.Color('red'), pt.t, (pt + Position(0, 5)).t)
-        pygame.draw.line(surface, pygame.Color('red'), pt.t, (pt + Position(0, -5)).t)
+        br = Rect(pt, (0, self.shape.height)).inflate(self.shape.width/2, 0).move(0, -self.shape.height)
+        # pygame.draw.rect(surface, pygame.Color('azure'), camera.transform(self.rect))
+
+        pygame.draw.rect(surface, pygame.Color('skyblue'), br)
+        # helper.marker(pt, surface)
 
         # tp = camera.transform(self.pos)
         # pygame.draw.line(surface, (200, 0, 0), (tp[0], tp[1]-10), (tp[0], tp[1]+10))
@@ -54,7 +53,7 @@ class Body():
         scheme = xml_node.attrib['scheme']
 
         body = Body()
-        body.pos = Position(position[0], position[1])
+        body.pos = Pt(position)
         body.shape = Rect((0, 0), size)
         body.name = xml_node.attrib['id']
         # body.scheme = schemes.get(scheme)
