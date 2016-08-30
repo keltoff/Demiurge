@@ -16,13 +16,16 @@ class Interactable:
 
     @property
     def rect(self):
-        return Rect(self.pos, (0, 0)).inflate(*self.size/2)
+        return Rect(self.pos, (0, self.size[1])).inflate(self.size[0]/2, 0).move(0, -self.size[1])
+        # return Rect(self.pos, (0, 0)).inflate(*self.size/2)
 
     def update(self, level, keys):
         pass
 
     def draw(self, surface, camera):
-        pygame.draw.rect(surface, Color('darkgreen'), Rect(camera.transform(self.pos), (0, 0)).inflate(*self.size/2))
+        pt = camera.transform(self.pos)
+        br = Rect(pt, (0, self.size[1])).inflate(self.size[0]/2, 0).move(0, -self.size[1])
+        pygame.draw.rect(surface, Color('darkgreen'), br)
         # helper.marker(camera.transform(self.pos), surface)
 
     @staticmethod

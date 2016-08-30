@@ -29,7 +29,7 @@ class GameScreen(Screen):
     def __init__(self):
         self.background = empty()
 
-        self.level = Lines.from_xml()
+        self.level = Lines.from_xml('data/level2.xml')
 
         self.gui = gui.GUI()
 
