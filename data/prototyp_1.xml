@@ -1,0 +1,9 @@
+<level>
+    <walls>
+        <horizontal x1="-200" x2="-50" y="0" />
+        <horizontal x1="50" x2="200" y="0" />
+        <horizontal x1="-100" x2="100" y="200" />
+        <vertical x="-75" y1="0" y2="200" />
+        <vertical x="75" y1="0" y2="200" />
+    </walls>
+</level>

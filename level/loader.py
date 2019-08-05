@@ -21,3 +21,4 @@ class LevelFile:
         for v in self.tree.find('walls/vertical'):
             def out(val): return int(v.attrib[val])
             yield out('x'), out('y1'), out('y2')
+

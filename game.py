@@ -1,5 +1,6 @@
-from screens import screen
-
+from screens.menu import MenuScreen
+from screens.game import GameScreen
+from screens.prototype_1 import BoxPrototypeScreen
 __author__ = 'tryid_000'
 
 import pygame
@@ -15,17 +16,21 @@ if __name__ == "__main__":
     # overlays = pygame.sprite.RenderUpdates()
     # pygame.display.flip()
 
-    menu = screen.MenuScreen()
-    game = screen.GameScreen()
+    # menu = MenuScreen()
+    # game = GameScreen()
+
     # currentScreen = menu
-    currentScreen = game
+    # currentScreen = game
+
+    prototype = BoxPrototypeScreen()
+    current_screen = prototype
 
     game_over = False
     while not game_over:
 
         # XXX draw all the objects here
-        currentScreen.update()
-        currentScreen.draw(display)
+        current_screen.update()
+        current_screen.draw(display)
 
         # overlays = pygame.sprite.RenderUpdates()
         # overlays.draw(screen)
@@ -35,6 +40,6 @@ if __name__ == "__main__":
             if event.type == pygame.locals.QUIT:
                 game_over = True
             elif event.type == pygame.locals.KEYDOWN:
-                currentScreen.handle_key(event.key)
+                current_screen.handle_key(event.key)
             elif event.type == pygame.locals.KEYUP:
-                currentScreen.handle_key(event.key, release=True)
+                current_screen.handle_key(event.key, release=True)
