@@ -2,7 +2,7 @@ from level.level_base import Level
 from collections import namedtuple
 import pygame.draw
 from local_types import Pt
-from sprites.body import Body
+from sprites.box import BodyFactory, Body
 from level.interactable import Interactable
 import level.net as net
 
@@ -91,6 +91,8 @@ class Linkage(Level):
         self.hlines = []
         self.vlines = []
 
+        self.bodies = []
+
     def draw(self, surface, camera):
         # def draw_all(X):
         #     for x in X:
@@ -98,6 +100,9 @@ class Linkage(Level):
 
         for l in self.hlines + self.vlines:
             l.draw(surface, camera)
+
+        for b in self.bodies:
+            b.draw(surface, camera)
 
     def load(self, xml):
         for h in xml.findall('walls/horizontal'):
@@ -113,6 +118,10 @@ class Linkage(Level):
                 if touch(h, v):
                     h.links.append(v)
                     v.links.append(h)
+
+        factory = BodyFactory.from_xml(xml.findall('bodies/model'))
+
+        self.bodies = [factory.parse(body_xml) for body_xml in xml.findall('bodies/body')]
 
 
 def touch(h, v):
