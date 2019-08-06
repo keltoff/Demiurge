@@ -41,5 +41,7 @@ if __name__ == "__main__":
                 game_over = True
             elif event.type == pygame.locals.KEYDOWN:
                 current_screen.handle_key(event.key)
+                if event.key == pygame.K_q:
+                    game_over = True
             elif event.type == pygame.locals.KEYUP:
                 current_screen.handle_key(event.key, release=True)
