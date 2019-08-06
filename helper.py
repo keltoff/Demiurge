@@ -2,12 +2,24 @@ from local_types import Pt
 import pygame
 
 
-def marker(pt, surface):
-    # pt = Pt(pt)
-    pygame.draw.line(surface, pygame.Color('red'), pt, pt + Pt(-5, 0))
-    pygame.draw.line(surface, pygame.Color('red'), pt, pt + Pt(5, 0))
-    pygame.draw.line(surface, pygame.Color('red'), pt, pt + Pt(0, 5))
-    pygame.draw.line(surface, pygame.Color('red'), pt, pt + Pt(0, -5))
+def marker(pt, surface, mark='+', color='red'):
+    if isinstance(color, str):
+        color = pygame.Color(color)
+
+    size = 5
+
+    if mark == '+':
+        pygame.draw.line(surface,  color, pt, pt + Pt(-size, 0))
+        pygame.draw.line(surface, color, pt, pt + Pt(size, 0))
+        pygame.draw.line(surface, color, pt, pt + Pt(0, size))
+        pygame.draw.line(surface, color, pt, pt + Pt(0, -size))
+    elif mark == 'o':
+        pygame.draw.circle(surface, color, pt.as_int(), size, 1)
+    elif mark == 'x':
+        pygame.draw.line(surface, color, pt, pt + Pt(-size, -size))
+        pygame.draw.line(surface, color, pt, pt + Pt(-size, size))
+        pygame.draw.line(surface, color, pt, pt + Pt(size, -size))
+        pygame.draw.line(surface, color, pt, pt + Pt(size, size))
 
 
 def anchored_rect(position, shape, anchor='cc'):
