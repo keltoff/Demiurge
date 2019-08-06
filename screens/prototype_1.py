@@ -14,6 +14,7 @@ from screen import Screen
 
 class BoxPrototypeScreen(Screen):
     def __init__(self):
+        Screen.__init__(self)
         self.background = empty()
 
         self.level = Linkage.from_xml('data/prototyp_1.xml')
@@ -39,6 +40,11 @@ class BoxPrototypeScreen(Screen):
             s.update(self.level, held_keys, s == self.focus)
 
         self.camera.update()
+        if self.focus is None:
+            motions = {'UP': (0, 10), 'DN': (0, -10), 'LT': (-10, 0), 'RT': (10, 0)}
+            for key, shift in motions.iteritems():
+                if key in held_keys:
+                    self.camera.target = self.camera.pos + shift
 
     def draw(self, surface):
 
@@ -68,14 +74,6 @@ class BoxPrototypeScreen(Screen):
         if key == pygame.K_PAGEUP:
             self.focus = self.bodies.last()
             self.camera.focus_on(self.focus)
-
-        # self.player.control(pressed)
-        motions = {'UP': (0, 10), 'DN': (0, -10), 'LT': (-10, 0), 'RT': (10, 0)}
-        if pressed in motions.keys():
-            if self.focus is None:
-                self.camera.target = self.camera.pos + motions[pressed]
-            # else:
-            #     self.focus.move(pressed)
 
 
 _keymap_ = {pygame.K_UP: 'UP',

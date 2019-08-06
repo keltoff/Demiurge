@@ -1,8 +1,6 @@
 from screens.menu import MenuScreen
 from screens.game import GameScreen
 from screens.prototype_1 import BoxPrototypeScreen
-__author__ = 'tryid_000'
-
 import pygame
 import pygame.locals
 
