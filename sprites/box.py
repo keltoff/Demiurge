@@ -3,6 +3,7 @@ import pygame.draw
 from local_types import Pt
 from ast import literal_eval as make_tuple
 import helper
+from level.linkage_lines import HLine, VLine
 
 
 class BodyFactory:
@@ -54,18 +55,53 @@ class Body:
 
         self.scheme = None
         self.name = None
+        
+        self.speed = 10
+
+        self.on_line = None
 
     @property
     def cpos(self):
         return self.pos
 
-    def update(self, level, keys):
-        pass
+    def update(self, level, keys, is_player):
+        if is_player:
+            shift = Pt(0, 0)
+            for key, change in {'UP': (0, 10), 'DN': (0, -10), 'LT': (-10, 0), 'RT': (10, 0)}.iteritems():
+                if key in keys:
+                    shift += change
+            self.pos = self.on_line.try_move(self.pos + shift)
 
-    def draw(self, surface, camera):
+            switch, dist = None, float('inf')
+            if isinstance(self.on_line, HLine):
+                if 'UP' in keys:
+                    switch, dist = self.on_line.up_closest(self.pos)
+                if 'DN' in keys:
+                    switch, dist = self.on_line.down_closest(self.pos)
+            if isinstance(self.on_line, VLine):
+                if 'LT' in keys:
+                    switch, dist = self.on_line.left_closest(self.pos)
+                if 'RT' in keys:
+                    switch, dist = self.on_line.right_closest(self.pos)
+
+            if switch and dist <= self.speed:
+                self.on_line = switch
+                self.pos = switch.try_move(self.pos)
+        else:
+            # AI
+            pass
+
+    def draw(self, surface, camera, is_player):
         tpos = camera.transform(self.cpos)
         rect = self.shape.move(tpos.x, tpos.y)
 
-        pygame.draw.rect(surface, pygame.Color('skyblue'), rect)
+        if is_player:
+            color = pygame.Color('blue')
+        else:
+            color = pygame.Color('gray')
+        pygame.draw.rect(surface, color, rect)
 
-        helper.marker(tpos, surface)
+        if self.on_line:
+            helper.marker(tpos, surface, 'o')
+        else:
+            helper.marker(tpos, surface, 'x')

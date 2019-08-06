@@ -7,7 +7,7 @@ import pygame.font as font
 from pygame import Rect
 from graphics.background import empty
 import GUI as gui
-from local_types import Pt
+from local_types import Pt, FlipThroughList
 import sprites.sophia as soph
 from screen import Screen
 
@@ -17,11 +17,12 @@ class BoxPrototypeScreen(Screen):
         self.background = empty()
 
         self.level = Linkage.from_xml('data/prototyp_1.xml')
+        self.bodies = FlipThroughList(self.level.bodies)
+        self.focus = None
 
         self.gui = gui.GUI()
 
         self.camera = cam.Camera(Pt(320, 240))
-        self.focus = None
 
         # sophia = soph.sophia()
         # sophia.pos = Position(10, 10)
@@ -33,16 +34,16 @@ class BoxPrototypeScreen(Screen):
     def update(self):
         held_keys = _keys_held()
 
-        for s in self.sprites:
-            s.update(self.level, held_keys)
+        # for s in self.sprites:
+        for s in self.level.bodies:
+            s.update(self.level, held_keys, s == self.focus)
+
         self.camera.update()
 
     def draw(self, surface):
 
         self.background.draw(surface, self.camera)
-        self.level.draw(surface, self.camera)
-        for s in self.sprites:
-            s.draw(surface, self.camera)
+        self.level.draw(surface, self.camera, self.focus)
 
         # self.effects.draw()
         self.gui.draw(surface)
@@ -55,25 +56,26 @@ class BoxPrototypeScreen(Screen):
 
         if key == pygame.K_HOME:
             self.focus = None
+            self.bodies.clear()
             self.camera.focus_on(Pt(0, 0))
+        if key == pygame.K_DELETE:
+            self.focus = None
+            self.bodies.clear()
+            self.camera.focus_on(self.camera.pos)
         if key == pygame.K_PAGEDOWN:
-            if self.focus is None or self.focus == len(self.level.bodies)-1:
-                self.focus = 0
-            else:
-                self.focus += 1
-            self.camera.focus_on(self.level.bodies[self.focus])
+            self.focus = self.bodies.next()
+            self.camera.focus_on(self.focus)
         if key == pygame.K_PAGEUP:
-            if self.focus is None or self.focus == 0:
-                self.focus = len(self.level.bodies) - 1
-            else:
-                self.focus -= 1
-            self.camera.focus_on(self.level.bodies[self.focus])
+            self.focus = self.bodies.last()
+            self.camera.focus_on(self.focus)
 
         # self.player.control(pressed)
         motions = {'UP': (0, 10), 'DN': (0, -10), 'LT': (-10, 0), 'RT': (10, 0)}
         if pressed in motions.keys():
-            self.focus = None
-            self.camera.target = self.camera.pos + motions[pressed]
+            if self.focus is None:
+                self.camera.target = self.camera.pos + motions[pressed]
+            # else:
+            #     self.focus.move(pressed)
 
 
 _keymap_ = {pygame.K_UP: 'UP',

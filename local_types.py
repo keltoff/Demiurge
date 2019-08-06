@@ -72,5 +72,45 @@ class Pt(tuple):
     def __truediv__(self, other):
         return Pt(div(self, other))
 
+    def as_int(self):
+        return Pt(int(self[0]), int(self[1]))
+
+
 Pt.x = property(operator.itemgetter(0))
 Pt.y = property(operator.itemgetter(1))
+
+
+class FlipThroughList:
+    def __init__(self, content):
+        self.content = content
+        self.current = None
+
+    def __getitem__(self, item):
+        return self.content.__getitem__(item)
+
+    def next(self):
+        if self.current in [None, len(self.content) -1 ]:
+            self.current = 0
+        else:
+            self.current += 1
+
+        return self.item
+
+    def last(self):
+        if self.current in [None, 0 ]:
+            self.current = len(self.content) - 1
+        else:
+            self.current -= 1
+
+        return self.item
+
+    def clear(self):
+        self.current = None
+        return None
+
+    @property
+    def item(self):
+        if self.current is None:
+            return None
+        else:
+            return self.content[self.current]
